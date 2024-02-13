@@ -1,0 +1,498 @@
+openapi: 3.0.0
+info:
+  title: Final Demo API Documentation
+  description: Optional multiline or single-line description in CommonMark or HTML.
+  version: 1.0
+servers:
+  - url: http://192.168.1.172:5000/category
+    description: Category server api url
+  - url: http://192.168.1.172:5000/product
+    description: Product server api url
+  - url: http://192.168.1.172:5000/user
+    description: User server api url
+
+components:
+  schemas:
+    Data:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        isadmin:
+          type: string
+        isVerified:
+          type: string
+        profileImage:
+          type: file
+
+    Items:
+      type: object
+      properties:
+        BrandName:
+          type: string
+        Rating:
+          type: string
+        Price:
+          type: string
+        Type:
+          type: string
+        ProductDescription:
+          type: string
+        categoryId:
+          type: string
+        ProductImage:
+          type: file
+
+    Category:
+      type: object
+      properties:
+        Category:
+          type: string
+        ProductDescription:
+          type: string     
+
+paths:
+# API Documentation of User
+  /getAllUserDetail:
+    get:
+      summary: Returns a list of users.
+      tags:
+        - User
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /register:
+    post:
+      summary: Create New Users.
+      tags:
+        - User
+      description: This is Post method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Data"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                type: string
+
+  /login:
+    post:
+      summary: Enter with exist detail.
+      tags:
+        - User
+      description: This is Post method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Data"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                type: string
+
+  /forgot_password:
+    post:
+      summary: Enter forgetPassword method detail.
+      tags:
+        - User
+      description: This is Post forget Password method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Data"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                type: string
+
+  /reset_password/{id}/{token}:
+    post:
+      summary: Enter reset password detail.
+      tags:
+        - User
+      description: This is reset password post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Data"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Required Numeric ID
+          schema:
+            type: integer
+        - in: path
+          name: token
+          required: true
+          description: Required Numeric Token
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                type: string
+
+  /updateProfile/{id}:
+    patch:
+      summary: Update user profile image
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profileImage:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Profile image updated successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /getProfileImg/{id}:
+    get:
+      summary: Get user profile Image by ID
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+
+  /deleteUser/{id}:
+    delete:
+      summary: Delete user by ID
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User deleted successfully
+        "404":
+          description: User not found
+        "500":
+          description: Internal server error
+
+  /updatePassword/{id}:
+    patch:
+      summary: Update User Password
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Data"
+      responses:
+        "200":
+          description: User Password updated successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+# API Documentation of Product
+  /allProduct:
+    get:
+      summary: Returns a list of Products.
+      tags:
+        - Product
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /addProduct:
+    post:
+      summary: Add new Product
+      tags:
+        - Product
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#components/schemas/Items"
+              type: object
+              properties:
+                profileImage:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Product Add Successfully successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /deleteProduct/{id}:
+    delete:
+      summary: Delete Product by ID
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User deleted successfully
+        "404":
+          description: User not found
+        "500":
+          description: Internal server error
+
+  /productDetail/{id}:
+    get:
+      summary: Return Detail of Single Product.
+      tags:
+        - Product
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /productCategory:
+    get:
+      summary: Returns a list of Category.
+      tags:
+        - Product
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /updateProduct:
+    patch:
+      summary: Update existed Product
+      tags:
+        - Product
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#components/schemas/Items"
+              type: object
+              properties:
+                profileImage:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Product Add Successfully successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /sortAsc:
+    get:
+      summary: Returns a list of Product in Ascending.
+      tags:
+        - Product
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string      
+
+  /sortdesc:
+    get:
+      summary: Returns a list of Product in Descending.
+      tags:
+        - Product
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string             
+
+# API Documentation of Category
+  /getCategory:
+    get:
+      summary: Returns a list of Category.
+      tags:
+        - Category
+      description: This is a get method
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /addCategory:
+    post:
+      summary: Create New Category.
+      tags:
+        - Category
+      description: This is Post method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Category"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+              items:
+                type: string     
+
+  /deleteCate/{id}:
+    delete:
+      summary: Delete Category by ID
+      tags:
+        - Category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Category deleted successfully
+        "404":
+          description: Category not found
+        "500":
+          description: Internal server error   
+
+  /updateCate/{id}:
+    patch:
+      summary: Update Category data
+      tags:
+        - Category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/Category"
+      responses:
+        "200":
+          description: Profile image updated successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error                              

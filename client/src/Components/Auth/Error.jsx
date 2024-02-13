@@ -20,7 +20,7 @@ const Error = () => {
           Page Not Found
         </p>
         <p class="text-gray-500 mt-4 pb-4 border-b-2 text-center">
-          Sorry, the page you are loookingg for could not be found.
+          Sorry, the page you are looking for could not be found.
         </p>
         <a
           href="#"
